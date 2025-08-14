@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Customer Churn Predictor</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container py-5">
+    <h2 class="mb-4">🧠 Customer Churn Prediction Form</h2>
+
+    <form method="POST" class="row g-3">
+
+        <!-- Age -->
+        <div class="col-md-3">
+            <label class="form-label">Customer Age</label>
+            <input type="number" name="Customer_Age" class="form-control" required>
+        </div>
+
+        <!-- Gender -->
+        <div class="col-md-3">
+            <label class="form-label">Gender</label>
+            <select name="Gender" class="form-select">
+                <option value="M">Male</option>
+                <option value="F">Female</option>
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label">Dependents</label>
+            <input type="number" name="Dependent_count" class="form-control" required>
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label">Education Level</label>
+            <select name="Education_Level" class="form-select">
+                <option value="High School">High School</option>
+                <option value="Graduate">Graduate</option>
+                <option value="Uneducated">Uneducated</option>
+                <option value="College">College</option>
+                <option value="Post-Graduate">Post-Graduate</option>
+                <option value="Doctorate">Doctorate</option>
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label">Marital Status</label>
+            <select name="Marital_Status" class="form-select">
+                <option value="Married">Married</option>
+                <option value="Single">Single</option>
+                <option value="Divorced">Divorced</option>
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label">Income Category</label>
+            <select name="Income_Category" class="form-select">
+                <option value="Less than $40K">Less than $40K</option>
+                <option value="$40K - $60K">$40K - $60K</option>
+                <option value="$60K - $80K">$60K - $80K</option>
+                <option value="$80K - $120K">$80K - $120K</option>
+                <option value="$120K +">$120K +</option>
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label">Card Category</label>
+            <select name="Card_Category" class="form-select">
+                <option value="Blue">Blue</option>
+                <option value="Silver">Silver</option>
+                <option value="Gold">Gold</option>
+                <option value="Platinum">Platinum</option>
+            </select>
+        </div>
+
+        <!-- Remaining Fields -->
+        {% for field in ['Months_on_book', 'Total_Relationship_Count', 'Months_Inactive_12_mon',
+        'Contacts_Count_12_mon', 'Credit_Limit', 'Total_Revolving_Bal',
+        'Avg_Open_To_Buy', 'Total_Amt_Chng_Q4_Q1', 'Total_Trans_Amt',
+        'Total_Trans_Ct', 'Total_Ct_Chng_Q4_Q1', 'Avg_Utilization_Ratio'] %}
+        <div class="col-md-3">
+            <label class="form-label">{{ field.replace("_", " ") }}</label>
+            <input type="number" step="any" name="{{ field }}" class="form-control" required>
+        </div>
+        {% endfor %}
+
+        <div class="col-12 mt-3">
+            <button type="submit" class="btn btn-primary">🔍 Predict</button>
+        </div>
+    </form>
+
+    {% if result %}
+    <div class="mt-5">
+        <h4>Prediction Result:</h4>
+        <div class="alert {% if 'Churn' in result %}alert-danger{% else %}alert-success{% endif %}" role="alert">
+            {{ result }}
+        </div>
+
+        <h5 class="mt-4">Your Input Summary:</h5>
+        <table class="table table-bordered table-striped">
+            <thead>
+            <tr><th>Feature</th><th>Value</th></tr>
+            </thead>
+            <tbody>
+            {% for key, value in user_input.items() %}
+            <tr>
+                <td>{{ key.replace("_", " ") }}</td>
+                <td>{{ value }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+</div>
+
+</body>
+</html>
